@@ -1,18 +1,19 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import {Image} from './image'
 
 export class Walker {
 
   /**
    * List all files by path
    */
-  async list(path:string, onFile:any) {
+  async list(path:string, image:Image) {
     const stats = fs.statSync(path);
     if (stats.isFile()) {
-      onFile(path);
+      image.onFile(path);
     }
     else if (stats.isDirectory()) {
-      await this.walkDir(path, onFile);
+      await this.walkDir(path, image);
     }
     else {
       throw new Error(`Unknown object ${name}`);
@@ -22,15 +23,17 @@ export class Walker {
   /**
    * Walk over a directory
    */
-  private async walkDir(dir:string, onFile:any) {
+  private async walkDir(dir:string, image:Image) {
+    /* read and iterate directory */
     const dirents:fs.Dirent[] = await fs.promises.readdir(dir, {withFileTypes: true});
     for (const dirent of dirents) {
+      /* prepare entity name */
       const name = path.join(dir, dirent.name);
       if (dirent.isFile()) {
-        onFile(name);
+        image.onFile(name);
       }
       else if (dirent.isDirectory()) {
-        this.walkDir(name, onFile);
+        this.walkDir(name, image);
       }
       else {
         throw new Error(`Unknown object ${name}`);
