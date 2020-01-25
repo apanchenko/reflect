@@ -1,6 +1,5 @@
 import {Command, flags} from '@oclif/command'
 import {Walker} from './walker'
-import {Image} from './image'
 import {Storage} from './storage'
 
 class Reflect extends Command {
@@ -28,8 +27,8 @@ class Reflect extends Command {
 
     if (args.source) {
       const walker = new Walker();
-      const image:Image = new Storage();
-      walker.list(args.source, image);
+      const storage:Storage = new Storage();
+      walker.list(args.source, storage);
     }
   }
 }

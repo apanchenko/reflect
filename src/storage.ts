@@ -1,8 +1,11 @@
-import {Image} from './image'
+import * as fs from 'fs'
 
-export class Storage implements Image {
+export class Storage {
 
-  onFile(name: string) : void {
+  entities:fs.Stats[] = [];
+
+  async onFile(name: string) : Promise<void> {
+    const stats = await fs.promises.stat(name);
     console.log(name);
   }
 }
