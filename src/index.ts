@@ -17,19 +17,23 @@ class Reflect extends Command {
   }
 
   static args = [
-    {name: 'source'},
-    {name: 'mirror'}
+    {name: 'source', required: true},
+    {name: 'mirror', required: true}
   ]
 
   async run() {
     // parse cli
     const {args, flags} = this.parse(Reflect)
 
-    if (args.source) {
-      const walker = new Walker();
-      const storage:Storage = new Storage();
-      walker.list(args.source, storage);
-    }
+    const walker = new Walker();
+
+    // walk source folder
+    const source:Storage = new Storage();
+    walker.list(args.source, source);
+
+    // walk mirror folder
+    const mirror:Storage = new Storage();
+    walker.list(args.mirror, mirror);
   }
 }
 

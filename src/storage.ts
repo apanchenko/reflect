@@ -2,10 +2,12 @@ import * as fs from 'fs'
 
 export class Storage {
 
-  entities:fs.Stats[] = [];
+  entities: fs.Stats[] = [];
 
-  async onFile(name: string) : Promise<void> {
+  /** add file */
+  async onFile(name: string): Promise<void> {
     const stats = await fs.promises.stat(name);
-    console.log(name);
+    this.entities.push(stats);
+    console.log(`${name} ${stats.size}`);
   }
 }
