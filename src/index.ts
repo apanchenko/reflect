@@ -19,7 +19,7 @@ class Reflect extends Command {
 
   static args = [
     {name: 'source', required: true},
-    {name: 'mirror', required: true}
+    {name: 'reflect', required: true}
   ]
 
   async run() {
@@ -27,14 +27,17 @@ class Reflect extends Command {
     const {args, flags} = this.parse(Reflect)
 
     const walker = new Walker();
-    const source = new Storage();
-    const mirror = new Storage();
+    const source = new Storage(args.source);
+    const reflect = new Storage(args.reflect);
 
     // walk source and mirror folders
     await Promise.all([
-      walker.list(args.source, source),
-      walker.list(args.mirror, mirror)
+      walker.list(source),
+      walker.list(reflect)
     ]);
+
+    source.print(`source:`);
+    reflect.print(`reflect:`);
   }
 }
 

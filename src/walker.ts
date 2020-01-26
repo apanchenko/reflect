@@ -4,39 +4,34 @@ import {Storage} from './storage'
 
 export class Walker {
 
-  /**
-   * List all files by path
-   */
-  async list(path:string, storage:Storage) {
-    const stats = await fs.promises.stat(path);
-    if (stats.isFile()) {
-      await storage.onFile(path);
+  /** List all files by path */
+  async list(storage: Storage): Promise<void> {
+    const stats = await fs.promises.stat(storage.root);
+    await this.lookAt(stats, '', storage);
+    storage.onEnd();
+  }
+
+  /** Walk over a directory */
+  private async walkDir(dir: string, storage: Storage): Promise<void> {
+    const dirents = await fs.promises.readdir(
+      path.join(storage.root, dir),
+      {withFileTypes: true});
+    for (const ent of dirents) {
+      const name = path.join(dir, ent.name);
+      await this.lookAt(ent, name, storage);
     }
-    else if (stats.isDirectory()) {
-      await this.walkDir(path, storage);
+  }
+
+  /** Route on entity */
+  private async lookAt(ent: fs.Dirent | fs.Stats, name: string, storage: Storage): Promise<void> {
+    if (ent.isFile()) {
+      await storage.onFile(name);
+    }
+    else if (ent.isDirectory()) {
+      await this.walkDir(name, storage);
     }
     else {
       throw new Error(`Unknown object ${name}`);
-    }
-    await storage.onEnd();
-  }
-
-  /** 
-   * Walk over a directory
-   */
-  private async walkDir(dir:string, storage:Storage) {
-    const dirents: fs.Dirent[] = await fs.promises.readdir(dir, {withFileTypes: true});
-    for (const dirent of dirents) {
-      const name = path.join(dir, dirent.name);
-      if (dirent.isFile()) {
-        await storage.onFile(name);
-      }
-      else if (dirent.isDirectory()) {
-        await this.walkDir(name, storage);
-      }
-      else {
-        throw new Error(`Unknown object ${name}`);
-      }
     }
   }
 }
