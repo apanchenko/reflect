@@ -18,6 +18,7 @@ export class Walker {
     else {
       throw new Error(`Unknown object ${name}`);
     }
+    await storage.onEnd();
   }
 
   /** 

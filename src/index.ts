@@ -14,6 +14,7 @@ class Reflect extends Command {
     name: flags.string({char: 'n', description: 'name to print'}),
     // flag with no value (-f, --force)
     force: flags.boolean({char: 'f'}),
+    ignorecase: flags.boolean({char: 'i'})
   }
 
   static args = [
@@ -26,14 +27,14 @@ class Reflect extends Command {
     const {args, flags} = this.parse(Reflect)
 
     const walker = new Walker();
+    const source = new Storage();
+    const mirror = new Storage();
 
-    // walk source folder
-    const source:Storage = new Storage();
-    walker.list(args.source, source);
-
-    // walk mirror folder
-    const mirror:Storage = new Storage();
-    walker.list(args.mirror, mirror);
+    // walk source and mirror folders
+    await Promise.all([
+      walker.list(args.source, source),
+      walker.list(args.mirror, mirror)
+    ]);
   }
 }
 
