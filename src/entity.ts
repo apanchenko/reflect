@@ -22,4 +22,8 @@ export class Entity {
     }
     return 0;
   }
+
+  equals(other: Entity): boolean {
+    return this._size === other._size && this._name === other._name;
+  }
 }
