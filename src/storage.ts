@@ -26,13 +26,6 @@ export class Storage {
   }
 
   /**
-   * Finish adding files
-   */
-  onEnd(): void {
-    this.entities.sort(Entity.compare);
-  }
-
-  /**
    * Remove duplicate entity
    * @return true if entity was removed
    */
@@ -61,6 +54,6 @@ export class Storage {
    */
   print(header: string): void {
     console.log(header);
-    this.each(entity => console.log(`  ${entity.name} ${entity.size}`));
+    this.each(entity => console.log('  ' + entity.toString()));
   }
 }
