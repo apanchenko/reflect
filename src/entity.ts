@@ -15,6 +15,10 @@ export class Entity {
     return this.size === other.size && this.name === other.name;
   }
 
+  equalsByName(other: Entity): boolean {
+    return this.name === other.name;
+  }
+
   /** text message for log */
   toString(): string {
     return `${this.name} ${this.size}`;

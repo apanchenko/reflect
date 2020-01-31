@@ -43,17 +43,39 @@ export class Storage {
   }
 
   /**
-   * Iterate entities
-   */
-  each(fn: (entity:Entity) => any): void {
-    this.entities.forEach(fn);
-  }
-
-  /**
    * Print to console
    */
   print(header: string): void {
     console.log(header);
     this.each(entity => console.log('  ' + entity.toString()));
+  }
+
+  /**
+   * Remove multiple entities by name
+   */
+  subtractByName(storage: Storage): void {
+    storage.each(entity => this.removeByName(entity));
+  }
+
+  /**
+   * Remove entity by name
+   */
+  private removeByName(entity: Entity): void {
+    let length = this.entities.length;
+    for (let i = 0; i < length; i++) {
+      if (this.entities[i].equalsByName(entity)) {
+        length--;
+        this.entities[i] = this.entities[length];
+        this.entities.length = length;
+        break;
+      }
+    }
+  }
+
+  /**
+   * Iterate entities
+   */
+  private each(fn: (entity:Entity) => any): void {
+    this.entities.forEach(fn);
   }
 }

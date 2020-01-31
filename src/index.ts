@@ -44,8 +44,18 @@ export = class Reflect extends Command {
       walker.list(reflect)
     ]);
 
+    // skip files which will be overwritten
+    reflect.subtractByName(source);
+
     // print results
     source.print(`source:`);
     reflect.print(`reflect:`);
+
+    // copy diff files
+    // a. delete obsolete files from 'reflect'
+//    walker.delete(reflect);
+
+    // b. copy new/changed files from 'source'
+//    walker.copy(source, reflect);
   }
 }

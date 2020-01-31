@@ -10,6 +10,11 @@ export class Walker {
     await this.lookAt(stats, '', storage);
   }
 
+  /** Delete all files */
+  async delete(storage: Storage): Promise<void> {
+
+  }
+
   /** Walk over a directory */
   private async walkDir(dir: string, storage: Storage): Promise<void> {
     const dirents = await fs.promises.readdir(
