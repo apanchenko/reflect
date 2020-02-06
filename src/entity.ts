@@ -23,4 +23,9 @@ export class Entity {
   toString(): string {
     return `${this.name} ${this.size}`;
   }
+
+  /** @return file name */
+  getName(): string {
+    return this.name;
+  }
 }

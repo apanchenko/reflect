@@ -19,43 +19,42 @@ export = class Reflect extends Command {
 
   static args = [
     {name: 'source', required: true},
-    {name: 'reflect', required: true}
+    {name: 'target', required: true}
   ]
 
   /**
    * Run this big program
    */
   async run() {
-    // parse command line
+    /* parse command line */
     const {args, flags} = this.parse(Reflect)
 
-    // create entity collector and storages
+    /* create entity collector and storages */
     const walker = new Walker();
     const source = new Storage(args.source);
-    const reflect = new Storage(args.reflect);
+    const target = new Storage(args.target);
 
-    // storages meet each other to terminate duplicate entities
-    source.mirror = reflect;
-    reflect.mirror = source;
+    /* storages meet each other to terminate duplicate entities */
+    source.mirror = target;
+    target.mirror = source;
 
-    // walk source and mirror folders
+    /* walk source and collect file info */
     await Promise.all([
       walker.list(source),
-      walker.list(reflect)
+      walker.list(target)
     ]);
 
-    // skip files which will be overwritten
-    reflect.subtractByName(source);
+    /* skip files which will be overwritten */
+    target.subtractByName(source);
 
-    // print results
+    /* print results */
     source.print(`source:`);
-    reflect.print(`reflect:`);
+    target.print(`target:`);
 
-    // copy diff files
-    // a. delete obsolete files from 'reflect'
-//    walker.delete(reflect);
+    /* delete obsolete file from target */
+    target.delete();
 
-    // b. copy new/changed files from 'source'
-//    walker.copy(source, reflect);
+    /* copy new/changed files from source to target*/
+    source.copy(target);
   }
 }

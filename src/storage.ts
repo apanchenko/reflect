@@ -75,7 +75,29 @@ export class Storage {
   /**
    * Iterate entities
    */
-  private each(fn: (entity:Entity) => any): void {
-    this.entities.forEach(fn);
+  async each(fn: (entity:Entity) => any): Promise<void> {
+    for (const entity of this.entities) {
+      await fn(entity);
+    }
+  }
+
+  /** Copy files */
+  async copy(target: Storage): Promise<void> {
+    for (const entity of this.entities) {
+      await fs.promises.copyFile(
+        path.join(this.root, entity.getName()),
+        path.join(target.root, entity.getName())
+      );
+    }
+  }
+
+  /** Delete all files */
+  async delete(): Promise<void> {
+    for (const entity of this.entities) {
+      await fs.promises.unlink(
+        path.join(this.root, entity.getName())
+      );
+    }
+    this.entities.length = 0;
   }
 }

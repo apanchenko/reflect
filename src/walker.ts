@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import {Storage} from './storage'
+import {Entity} from './entity';
 
 export class Walker {
 
@@ -8,11 +9,6 @@ export class Walker {
   async list(storage: Storage): Promise<void> {
     const stats = await fs.promises.stat(storage.root);
     await this.lookAt(stats, '', storage);
-  }
-
-  /** Delete all files */
-  async delete(storage: Storage): Promise<void> {
-
   }
 
   /** Walk over a directory */
