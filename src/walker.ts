@@ -1,18 +1,17 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import {Storage} from './storage'
-import {Entity} from './entity';
 
 export class Walker {
 
   /** List all files by path */
-  async list(storage: Storage): Promise<void> {
+  static async list(storage: Storage): Promise<void> {
     const stats = await fs.promises.stat(storage.root);
     await this.lookAt(stats, '', storage);
   }
 
   /** Walk over a directory */
-  private async walkDir(dir: string, storage: Storage): Promise<void> {
+  private static async walkDir(dir: string, storage: Storage): Promise<void> {
     const dirents = await fs.promises.readdir(
       path.join(storage.root, dir),
       {withFileTypes: true});
@@ -23,7 +22,7 @@ export class Walker {
   }
 
   /** Route on entity */
-  private async lookAt(ent: fs.Dirent | fs.Stats, name: string, storage: Storage): Promise<void> {
+  private static async lookAt(ent: fs.Dirent | fs.Stats, name: string, storage: Storage): Promise<void> {
     if (ent.isFile()) {
       await storage.onFile(name);
     }

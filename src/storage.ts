@@ -42,24 +42,22 @@ export class Storage {
     return false;
   }
 
-  /**
-   * Print to console
-   */
+  /** Print to console */
   print(header: string): void {
     console.log(header);
-    this.each(entity => console.log('  ' + entity.toString()));
+    for (const entity of this.entities) {
+      console.log('  ' + entity.toString());
+    }
   }
 
-  /**
-   * Remove multiple entities by name
-   */
+  /** Remove multiple entities by name */
   subtractByName(storage: Storage): void {
-    storage.each(entity => this.removeByName(entity));
+    for (const entity of storage.entities) {
+      this.removeByName(entity);
+    }
   }
 
-  /**
-   * Remove entity by name
-   */
+  /** Remove entity by name */
   private removeByName(entity: Entity): void {
     let length = this.entities.length;
     for (let i = 0; i < length; i++) {
@@ -69,15 +67,6 @@ export class Storage {
         this.entities.length = length;
         break;
       }
-    }
-  }
-
-  /**
-   * Iterate entities
-   */
-  async each(fn: (entity:Entity) => any): Promise<void> {
-    for (const entity of this.entities) {
-      await fn(entity);
     }
   }
 

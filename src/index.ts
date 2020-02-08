@@ -30,7 +30,6 @@ export = class Reflect extends Command {
     const {args, flags} = this.parse(Reflect)
 
     /* create entity collector and storages */
-    const walker = new Walker();
     const source = new Storage(args.source);
     const target = new Storage(args.target);
 
@@ -40,8 +39,8 @@ export = class Reflect extends Command {
 
     /* walk source and collect file info */
     await Promise.all([
-      walker.list(source),
-      walker.list(target)
+      Walker.list(source),
+      Walker.list(target)
     ]);
 
     /* skip files which will be overwritten */
