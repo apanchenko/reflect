@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import {Walker} from './walker'
+import walk from './walker'
 import {Storage} from './storage'
 
 export = class Reflect extends Command {
@@ -39,12 +39,12 @@ export = class Reflect extends Command {
 
     /* walk source and collect file info */
     await Promise.all([
-      Walker.list(source),
-      Walker.list(target)
+      walk(source),
+      walk(target)
     ]);
 
     /* skip files which will be overwritten */
-    target.subtractByName(source);
+    target.skipByName(source);
 
     /* print results */
     source.print(`source:`);

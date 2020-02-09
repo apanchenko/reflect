@@ -20,7 +20,7 @@ export class Storage {
     const full = path.join(this.root, name);
     const stats = await fs.promises.stat(full);
     const entity = new Entity(name, stats);
-    if (!this.mirror?.removeDuplicate(entity)) {
+    if (!this.mirror?.skip(entity)) {
       this.entities.push(entity);
     }
   }
@@ -29,7 +29,7 @@ export class Storage {
    * Remove duplicate entity
    * @return true if entity was removed
    */
-  removeDuplicate(entity: Entity): boolean {
+  private skip(entity: Entity): boolean {
     let length = this.entities.length;
     for (let i = 0; i < length; i++) {
       if (entity.equals(this.entities[i])) {
@@ -51,21 +51,16 @@ export class Storage {
   }
 
   /** Remove multiple entities by name */
-  subtractByName(storage: Storage): void {
+  skipByName(storage: Storage): void {
     for (const entity of storage.entities) {
-      this.removeByName(entity);
-    }
-  }
-
-  /** Remove entity by name */
-  private removeByName(entity: Entity): void {
-    let length = this.entities.length;
-    for (let i = 0; i < length; i++) {
-      if (this.entities[i].equalsByName(entity)) {
-        length--;
-        this.entities[i] = this.entities[length];
-        this.entities.length = length;
-        break;
+      let length = this.entities.length;
+      for (let i = 0; i < length; i++) {
+        if (this.entities[i].equalsByName(entity)) {
+          length--;
+          this.entities[i] = this.entities[length];
+          this.entities.length = length;
+          break;
+        }
       }
     }
   }
