@@ -1,12 +1,20 @@
 {
-  "name": "reflect",
-  "description": "mirror folder contents",
-  "version": "0.0.0",
-  "author": "Anton Panchenko @apanchenko",
+  "name": "@apanchenko/reflect",
+  "description": "Mirror folder contents",
+  "version": "0.0.1",
+  "author": "Anton Panchenko <apanchenko@gmail.com> (https://github.com/apanchenko)",
+  "keywords": [
+    "file",
+    "folder",
+    "copy",
+    "backup"
+  ],
   "bin": {
-    "reflect": "./bin/run"
+    "reflect": "bin/run"
   },
-  "bugs": "https://github.com/apanchenko/reflect/issues",
+  "bugs": {
+    "url": "https://github.com/apanchenko/reflect/issues"
+  },
   "dependencies": {
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
@@ -37,20 +45,24 @@
     "/lib"
   ],
   "homepage": "https://github.com/apanchenko/reflect",
-  "keywords": [
-    "oclif"
-  ],
   "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
     "bin": "reflect"
   },
-  "repository": "apanchenko/reflect",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apanchenko/reflect.git"
+  },
   "scripts": {
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rimraf lib && tsc -b && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  }
 }

@@ -12,6 +12,20 @@ export class Storage {
     this.root = root;
   }
 
+  /**
+   * Get root path
+   */
+  get at(): string {
+    return this.root;
+  }
+
+  /**
+   * Get path relative to root
+   */
+  join(...paths: string[]): string {
+    return path.join(this.root, ...paths);
+  }
+
   /** 
    * Add entity to storage if not exists in mirror,
    * Or remove it from mirror storage.

@@ -4,15 +4,16 @@ import {Storage} from './storage'
 
 /** List all files by path */
 export default async (storage: Storage): Promise<void> => {
-  const stats = await fs.promises.stat(storage.root);
+  const stats = await fs.promises.stat(storage.at);
   await lookAt(stats, '', storage);
 }
 
 /** Walk over a directory */
 const walkDir = async (dir: string, storage: Storage): Promise<void> => {
   const dirents = await fs.promises.readdir(
-    path.join(storage.root, dir),
-    {withFileTypes: true});
+    storage.join(dir),
+    {withFileTypes: true}
+  );
   for (const ent of dirents) {
     const name = path.join(dir, ent.name);
     await lookAt(ent, name, storage);
