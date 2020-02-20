@@ -1,7 +1,7 @@
 {
   "name": "@apanchenko/reflect",
   "description": "Mirror folder contents",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Anton Panchenko <apanchenko@gmail.com> (https://github.com/apanchenko)",
   "keywords": [
     "file",
