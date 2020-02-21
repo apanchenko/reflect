@@ -4,12 +4,19 @@ import { Entity } from './entity';
 
 export class Storage {
 
-  root: string;
-  mirror?: Storage = undefined;
+  private root: string;
+  private mirror?: Storage = undefined;
   private entities: Entity[] = [];
 
   constructor(root: string) {
     this.root = root;
+  }
+
+  /**
+   * Set mirror object to compare entities immediately
+   */
+  setMirror(mirror: Storage): void {
+    this.mirror = mirror;
   }
 
   /**

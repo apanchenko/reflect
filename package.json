@@ -1,6 +1,6 @@
 {
   "name": "@apanchenko/reflect",
-  "description": "Mirror folder contents",
+  "description": "Make target folder equivalent to source",
   "version": "0.0.2",
   "author": "Anton Panchenko <apanchenko@gmail.com> (https://github.com/apanchenko)",
   "keywords": [

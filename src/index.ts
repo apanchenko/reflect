@@ -29,8 +29,8 @@ export = class Reflect extends Command {
     const source = new Storage(args.source);
     const target = new Storage(args.target);
     /* storages meet each other to terminate duplicate entities */
-    source.mirror = target;
-    target.mirror = source;
+    source.setMirror(target);
+    target.setMirror(source);
     /* walk source and collect file info */
     await Promise.all([
       walk(source),
