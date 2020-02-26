@@ -1,31 +1,38 @@
-import * as fs from 'fs'
-
 export class Entity {
 
   private name: string;
+
   private size: number;
 
-  constructor(name: string, stats: fs.Stats) {
-    this.name = name;
-    this.size = stats.size;
+  constructor(name: string, size: number) {
+    this.name = name
+    this.size = size
   }
 
-  /** compare to other entity */
+  /**
+   * Compare to other entity
+   * @param {Entity} other entity to compare with
+   * @returns {boolean} true of entities are equal
+   */
   equals(other: Entity): boolean {
-    return this.size === other.size && this.name === other.name;
+    return this.size === other.size && this.name === other.name
   }
 
   equalsByName(other: Entity): boolean {
-    return this.name === other.name;
+    return this.name === other.name
   }
 
-  /** text message for log */
+  /**
+   * @returns {string} text message for log
+   */
   toString(): string {
-    return `${this.name} ${this.size}`;
+    return `${this.name} ${this.size}`
   }
 
-  /** @return file name */
+  /**
+   * @returns {string} file name
+   */
   getName(): string {
-    return this.name;
+    return this.name
   }
 }

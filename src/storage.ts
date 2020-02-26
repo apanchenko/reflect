@@ -1,15 +1,14 @@
-import * as fs from 'fs'
-import * as path from 'path'
-import { Entity } from './entity';
+import {Entity} from './Entity';
+import {Drive} from './Drive'
 
 export class Storage {
 
-  private root: string;
+  private drive: Drive
   private mirror?: Storage = undefined;
   private entities: Entity[] = [];
 
-  constructor(root: string) {
-    this.root = root;
+  constructor(drive: Drive) {
+    this.drive = drive
   }
 
   /**
@@ -19,30 +18,19 @@ export class Storage {
     this.mirror = mirror;
   }
 
-  /**
-   * Get root path
-   */
-  get at(): string {
-    return this.root;
-  }
-
-  /**
-   * Get path relative to root
-   */
-  join(...paths: string[]): string {
-    return path.join(this.root, ...paths);
+  get size(): number {
+    return this.entities.length
   }
 
   /** 
-   * Add entity to storage if not exists in mirror,
+   * Add entities to storage if not exists in mirror,
    * Or remove it from mirror storage.
    */
-  async onFile(name: string): Promise<void> {
-    const full = path.join(this.root, name);
-    const stats = await fs.promises.stat(full);
-    const entity = new Entity(name, stats);
-    if (!this.mirror?.skip(entity)) {
-      this.entities.push(entity);
+  async gather() {
+    for await (const entity of this.drive.walk()) {
+      if (!this.mirror?.skip(entity)) {
+        this.entities.push(entity);
+      }
     }
   }
 
@@ -84,25 +72,5 @@ export class Storage {
         }
       }
     }
-  }
-
-  /** Copy files */
-  async copy(target: Storage): Promise<void> {
-    for (const entity of this.entities) {
-      await fs.promises.copyFile(
-        path.join(this.root, entity.getName()),
-        path.join(target.root, entity.getName())
-      );
-    }
-  }
-
-  /** Delete all files */
-  async delete(): Promise<void> {
-    for (const entity of this.entities) {
-      await fs.promises.unlink(
-        path.join(this.root, entity.getName())
-      );
-    }
-    this.entities.length = 0;
   }
 }
