@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import * as Path from 'path'
 import {Drive} from './Drive'
 import {Entity} from './Entity'
+import * as stream from "stream"
 
 export class DriveLocal implements Drive {
 
@@ -34,21 +35,40 @@ export class DriveLocal implements Drive {
   }
 
   /** Copy files */
-  // async copy(target: Storage): Promise<void> {
-  //   for (const entity of this.entities) {
-  //     await fs.promises.copyFile(
-  //       Path.join(this.root, entity.getName()),
-  //       Path.join(target.root, entity.getName())
-  //     );
-  //   }
-  // }
+  async copy(entity: Entity, target: Drive): Promise<void> {
+    // await fs.promises.copyFile(
+    //   Path.join(this.root, entity.getName()),
+    //   Path.join(target.root, entity.getName())
+    // );
+    let rd = this.read(entity)
+    var wr = target.write(entity)
 
-  /** Delete all files */
-  async delete(ents: Entity[]): Promise<void> {
-    for (const ent of ents) {
-      await fs.promises.unlink(
-        Path.join(this.root, ent.getName())
-      );
-    }
+    return new Promise<void>(function(resolve, reject) {
+      wr.on('error', reject)
+        .on('finish', resolve)
+      rd.on('error', reject)
+        .pipe(wr);
+    }).catch(function(error) {
+      rd.destroy()
+      wr.end()
+      throw error
+    });
+  }
+
+  read(entity: Entity): stream.Readable {
+    const source = Path.join(this.root, entity.name)
+    return fs.createReadStream(source);
+  }
+
+  write(entity: Entity): stream.Writable {
+    const target = Path.join(this.root, entity.name)
+    return fs.createWriteStream(target);
+  }
+
+  /** Delete entity */
+  async delete(entity: Entity): Promise<void> {
+    await fs.promises.unlink(
+      Path.join(this.root, entity.name)
+    );
   }
 }

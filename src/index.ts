@@ -27,11 +27,11 @@ export = class Reflect extends Command {
     /* parse command line */
     const {args, flags} = this.parse(Reflect)
     /* create entity collector and storages */
-    const source = new Storage(new DriveLocal(args.source))
-    const target = new Storage(new DriveLocal(args.target))
-    /* storages meet each other to terminate duplicate entities */
-    source.setMirror(target)
-    target.setMirror(source)
+    const source = new Storage(
+      new DriveLocal(args.source),
+      new DriveLocal(args.target)
+    )
+    const target = source.other
     /* walk source and collect file info */
     await Promise.all([
       source.gather(),
@@ -47,9 +47,9 @@ export = class Reflect extends Command {
     /* ready to do the job */
     if (!flags.preview) {
       /* delete obsolete file from target */
-      //target.delete()
+      target.delete()
       /* copy new/changed files from source to target */
-      //source.copy(target)
+      source.copy()
     }
   }
 }

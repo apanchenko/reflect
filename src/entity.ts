@@ -1,11 +1,11 @@
 export class Entity {
 
-  private name: string;
+  private file: string;
 
   private size: number;
 
   constructor(name: string, size: number) {
-    this.name = name
+    this.file = name
     this.size = size
   }
 
@@ -15,24 +15,24 @@ export class Entity {
    * @returns {boolean} true of entities are equal
    */
   equals(other: Entity): boolean {
-    return this.size === other.size && this.name === other.name
+    return this.size === other.size && this.file === other.file
   }
 
   equalsByName(other: Entity): boolean {
-    return this.name === other.name
+    return this.file === other.file
   }
 
   /**
    * @returns {string} text message for log
    */
   toString(): string {
-    return `${this.name} ${this.size}`
+    return `${this.file} ${this.size}`
   }
 
   /**
    * @returns {string} file name
    */
-  getName(): string {
-    return this.name
+  get name(): string {
+    return this.file
   }
 }

@@ -4,18 +4,20 @@ import {Drive} from './Drive'
 export class Storage {
 
   private drive: Drive
-  private mirror?: Storage = undefined;
-  private entities: Entity[] = [];
+  private mirror: Storage
+  private entities: Entity[]
 
-  constructor(drive: Drive) {
+  constructor(drive: Drive, mirror: Drive | Storage) {
     this.drive = drive
+    this.mirror = mirror instanceof Storage ? mirror : new Storage(mirror, this)
+    this.entities = []
   }
 
   /**
-   * Set mirror object to compare entities immediately
+   * 
    */
-  setMirror(mirror: Storage): void {
-    this.mirror = mirror;
+  get other(): Storage {
+    return this.mirror
   }
 
   get size(): number {
@@ -32,6 +34,14 @@ export class Storage {
         this.entities.push(entity);
       }
     }
+  }
+
+  async delete() {
+    this.entities.forEach(ent => this.drive.delete(ent))
+  }
+
+  async copy() {
+    this.entities.forEach(ent => this.drive.copy(ent, this.mirror.drive))
   }
 
   /**
