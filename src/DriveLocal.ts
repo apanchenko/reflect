@@ -12,21 +12,18 @@ export class DriveLocal implements Drive {
     this.root = root
   }
 
-  async *walk(): AsyncGenerator<Entity> {
-    yield* this.walkDeep('')
-  }
-
   /** List all files by path */
-  async *walkDeep(path: string): AsyncGenerator<Entity> {
+  async *walk(path?: string): AsyncGenerator<Entity> {
+    path = path ?? ''
     const full = Path.join(this.root, path)
     const stats: fs.Stats = await fs.promises.stat(full)
     if (stats.isFile()) {
       yield new Entity(path, stats.size)
     }
     else if (stats.isDirectory()) {
-      const dirents = await fs.promises.readdir(full, {withFileTypes: true});
+      const dirents: fs.Dirent[] = await fs.promises.readdir(full, {withFileTypes: true})
       for (const ent of dirents) {
-        yield* this.walkDeep(Path.join(path, ent.name))
+        yield* this.walk(Path.join(path, ent.name))
       }
     }
     else {
@@ -36,13 +33,8 @@ export class DriveLocal implements Drive {
 
   /** Copy files */
   async copy(entity: Entity, target: Drive): Promise<void> {
-    // await fs.promises.copyFile(
-    //   Path.join(this.root, entity.getName()),
-    //   Path.join(target.root, entity.getName())
-    // );
     let rd = this.read(entity)
     var wr = target.write(entity)
-
     return new Promise<void>(function(resolve, reject) {
       wr.on('error', reject)
         .on('finish', resolve)
