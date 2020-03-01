@@ -18,6 +18,10 @@ export class Entity {
     return this.size === other.size && this.file === other.file
   }
 
+  /**
+   * Compare entities by name
+   * @param other enity to compare with
+   */
   equalsByName(other: Entity): boolean {
     return this.file === other.file
   }

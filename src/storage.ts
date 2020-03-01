@@ -14,12 +14,15 @@ export class Storage {
   }
 
   /**
-   * 
+   * Get the other side
    */
   get other(): Storage {
     return this.mirror
   }
-
+  
+  /**
+   * Gathered entity count
+   */
   get size(): number {
     return this.entities.length
   }
@@ -30,16 +33,22 @@ export class Storage {
    */
   async gather() {
     for await (const entity of this.drive.walk()) {
-      if (!this.mirror?.skip(entity)) {
+      if (!this.mirror.skip(entity)) {
         this.entities.push(entity);
       }
     }
   }
 
+  /**
+   * Delete all entities
+   */
   async delete() {
     this.entities.forEach(ent => this.drive.delete(ent))
   }
 
+  /**
+   * Copy all entities to the other side
+   */
   async copy() {
     this.entities.forEach(ent => this.drive.copy(ent, this.mirror.drive))
   }
@@ -61,7 +70,9 @@ export class Storage {
     return false;
   }
 
-  /** Print to console */
+  /**
+   * Print to console
+   */
   print(header: string): void {
     console.log(header);
     for (const entity of this.entities) {
@@ -69,9 +80,11 @@ export class Storage {
     }
   }
 
-  /** Remove multiple entities by name */
-  skipByName(storage: Storage): void {
-    for (const entity of storage.entities) {
+  /**
+   * Ignore entities by name
+   */
+  skipByName(): void {
+    for (const entity of this.mirror.entities) {
       let length = this.entities.length;
       for (let i = 0; i < length; i++) {
         if (this.entities[i].equalsByName(entity)) {

@@ -12,7 +12,9 @@ export class DriveLocal implements Drive {
     this.root = root
   }
 
-  /** List all files by path */
+  /**
+   * Enumerate files
+   */
   async *walk(path?: string): AsyncGenerator<Entity> {
     path = path ?? ''
     const full = Path.join(this.root, path)
@@ -31,36 +33,49 @@ export class DriveLocal implements Drive {
     }
   }
 
-  /** Copy files */
+  /**
+   * Copy entity to target drive
+   */
   async copy(entity: Entity, target: Drive): Promise<void> {
     let rd = this.read(entity)
     var wr = target.write(entity)
-    return new Promise<void>(function(resolve, reject) {
+    return new Promise<void>((resolve, reject) => {
       wr.on('error', reject)
         .on('finish', resolve)
       rd.on('error', reject)
         .pipe(wr);
-    }).catch(function(error) {
+    }).catch(error => {
       rd.destroy()
       wr.end()
       throw error
     });
   }
 
-  read(entity: Entity): stream.Readable {
-    const source = Path.join(this.root, entity.name)
-    return fs.createReadStream(source);
-  }
-
+  /**
+   * Create stream to write entity
+   * @param entity 
+   */
   write(entity: Entity): stream.Writable {
     const target = Path.join(this.root, entity.name)
     return fs.createWriteStream(target);
   }
 
-  /** Delete entity */
+  /**
+   * Delete entity
+   * @param entity
+   */
   async delete(entity: Entity): Promise<void> {
     await fs.promises.unlink(
       Path.join(this.root, entity.name)
     );
+  }
+
+  /**
+   * Crete stream to read entity
+   * @param entity to read from
+   */
+  private read(entity: Entity): stream.Readable {
+    const source = Path.join(this.root, entity.name)
+    return fs.createReadStream(source);
   }
 }

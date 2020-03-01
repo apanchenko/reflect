@@ -38,7 +38,7 @@ export = class Reflect extends Command {
       target.gather(),
     ])
     /* skip files which will be overwritten */
-    target.skipByName(source)
+    target.skipByName()
     /* print results */
     if (!flags.quiet) {
       source.print('source:')
