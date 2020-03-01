@@ -1,12 +1,17 @@
 export class Entity {
 
   private file: string;
-
-  private size: number;
+  private length: number;
 
   constructor(name: string, size: number) {
+    if (name.length == 0) {
+      throw new Error('Entity name must be non-empty')
+    }
+    if (size <= 0) {
+      throw new Error('Entity size must be positive')
+    }
     this.file = name
-    this.size = size
+    this.length = size
   }
 
   /**
@@ -15,7 +20,7 @@ export class Entity {
    * @returns {boolean} true of entities are equal
    */
   equals(other: Entity): boolean {
-    return this.size === other.size && this.file === other.file
+    return this.length === other.length && this.file === other.file
   }
 
   /**
@@ -27,16 +32,16 @@ export class Entity {
   }
 
   /**
-   * @returns {string} text message for log
-   */
-  toString(): string {
-    return `${this.file} ${this.size}`
-  }
-
-  /**
    * @returns {string} file name
    */
   get name(): string {
     return this.file
+  }
+
+  /**
+   * @returns {number} file size
+   */
+  get size(): number {
+    return this.length
   }
 }

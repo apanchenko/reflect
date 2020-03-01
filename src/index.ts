@@ -39,10 +39,10 @@ export = class Reflect extends Command {
     ])
     /* skip files which will be overwritten */
     target.skipByName()
-    /* print results */
+    /* print plan */
     if (!flags.quiet) {
-      source.print('source:')
-      target.print('target:')
+      target.print('To delete from target:')
+      source.print('To copy from source:')
     }
     /* ready to do the job */
     if (!flags.preview) {

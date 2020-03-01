@@ -1,7 +1,6 @@
 import {expect, test} from '@oclif/test'
 import mock = require('mock-fs');
 import cmd = require('../src')
-import walk from '../src/walker'
 import {Storage} from '../src/storage'
 
 describe('reflect', () => {
@@ -12,11 +11,11 @@ describe('reflect', () => {
     expect(2+2).to.equal(4);
   })
 
-  it('test walker', async () => {
-    let storage = new Storage('.');
-    await walk(storage);
-    expect(storage.size).to.equal(1)
-  })
+  // it('test walker', async () => {
+  //   let storage = new Storage('.');
+  //   await walk(storage);
+  //   expect(storage.size).to.equal(1)
+  // })
   // test
   //   .stdout()
   //   .do(() => cmd.run(['src', 't', '-p']))

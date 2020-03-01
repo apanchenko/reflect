@@ -23,8 +23,14 @@ export class Storage {
   /**
    * Gathered entity count
    */
-  get size(): number {
+  get count(): number {
     return this.entities.length
+  }
+
+  get size(): number {
+    return this.entities
+      .map(entity => entity.size)
+      .reduce((mem, cur) => mem += cur, 0)
   }
 
   /** 
@@ -54,29 +60,12 @@ export class Storage {
   }
 
   /**
-   * Remove duplicate entity
-   * @return true if entity was removed
-   */
-  private skip(entity: Entity): boolean {
-    let length = this.entities.length;
-    for (let i = 0; i < length; i++) {
-      if (entity.equals(this.entities[i])) {
-        length--;
-        this.entities[i] = this.entities[length];
-        this.entities.length = length;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
    * Print to console
    */
   print(header: string): void {
-    console.log(header);
+    console.log(header, this.entities.length, 'files, total', this.size, 'bytes');
     for (const entity of this.entities) {
-      console.log('  ' + entity.toString());
+      console.log('  ' + entity.name);
     }
   }
 
@@ -95,5 +84,22 @@ export class Storage {
         }
       }
     }
+  }
+
+  /**
+   * Remove duplicate entity
+   * @return true if entity was removed
+   */
+  private skip(entity: Entity): boolean {
+    let length = this.entities.length;
+    for (let i = 0; i < length; i++) {
+      if (entity.equals(this.entities[i])) {
+        length--;
+        this.entities[i] = this.entities[length];
+        this.entities.length = length;
+        return true;
+      }
+    }
+    return false;
   }
 }
