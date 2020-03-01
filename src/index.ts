@@ -1,10 +1,8 @@
 import {Command, flags} from '@oclif/command'
-import {Drive} from './Drive'
-import {DriveLocal} from './DriveLocal'
-import {Storage} from './Storage'
+import {DriveLocal} from './drive-local'
+import {Storage} from './storage'
 
 export = class Reflect extends Command {
-
   static description = 'Make target folder equivalent to source'
 
   static flags = {

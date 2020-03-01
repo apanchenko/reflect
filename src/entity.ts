@@ -1,10 +1,10 @@
 export class Entity {
-
   private file: string;
+
   private length: number;
 
   constructor(name: string, size: number) {
-    if (name.length == 0) {
+    if (name.length === 0) {
       throw new Error('Entity name must be non-empty')
     }
     if (size <= 0) {
@@ -25,7 +25,8 @@ export class Entity {
 
   /**
    * Compare entities by name
-   * @param other enity to compare with
+   * @param {Entity} other entity to compare with
+   * @returns {boolean} true if names are equal
    */
   equalsByName(other: Entity): boolean {
     return this.file === other.file
