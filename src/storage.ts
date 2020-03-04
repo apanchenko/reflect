@@ -66,11 +66,12 @@ export class Storage {
   /**
    * Print to console
    * @param {string} header text
+   * @param {any} log outout function
    */
-  print(header: string): void {
-    console.log(header, this.entities.length, 'files, total', this.size, 'bytes')
+  print(header: string, log: any): void {
+    log(header, this.entities.length, 'files, total', this.size, 'bytes')
     for (const entity of this.entities) {
-      console.log('  ' + entity.name)
+      log('  ' + entity.name)
     }
   }
 

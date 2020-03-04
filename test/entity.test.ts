@@ -1,5 +1,4 @@
-import {expect, test} from '@oclif/test'
-import {Entity} from '../src/Entity'
+import {Entity} from '../src/entity'
 import {assert} from 'chai'
 
 describe('Entity', () => {
@@ -16,7 +15,7 @@ describe('Entity', () => {
       assert.throws(() => new Entity('', 5))
     })
   })
-  describe('#equals', () => {
+  describe('#equals()', () => {
     it('entity equal to self', () => {
       const ent: Entity = new Entity('x', 5)
       assert.isTrue(ent.equals(ent))
@@ -25,29 +24,21 @@ describe('Entity', () => {
       const ent1: Entity = new Entity('x', 1)
       const ent2: Entity = new Entity('x', 1)
       assert.isTrue(ent1.equals(ent2))
-      assert.isTrue(ent2.equals(ent1))      
+      assert.isTrue(ent2.equals(ent1))
     })
     it('different name entities are not equal', () => {
-      assert.isFalse(
-        new Entity('x', 2).equals(
-        new Entity('y', 2)))
+      assert.isFalse(new Entity('x', 2).equals(new Entity('y', 2)))
     })
     it('different size entities are not equal', () => {
-      assert.isFalse(
-        new Entity('x', 2).equals(
-        new Entity('x', 3)))
+      assert.isFalse(new Entity('x', 2).equals(new Entity('x', 3)))
     })
   })
-  describe('#equalsByName', () => {
+  describe('#equalsByName()', () => {
     it('same name is ok', () => {
-      assert.isTrue(
-        new Entity('x', 2).equalsByName(
-        new Entity('x', 20)))
+      assert.isTrue(new Entity('x', 2).equalsByName(new Entity('x', 20)))
     })
     it('same size is not ok', () => {
-      assert.isFalse(
-        new Entity('x', 2).equalsByName(
-        new Entity('y', 2)))
+      assert.isFalse(new Entity('x', 2).equalsByName(new Entity('y', 2)))
     })
   })
 })

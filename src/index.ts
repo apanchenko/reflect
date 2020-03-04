@@ -39,8 +39,8 @@ export = class Reflect extends Command {
     target.skipByName()
     /* print plan */
     if (!flags.quiet) {
-      target.print('To delete from target:')
-      source.print('To copy from source:')
+      target.print('To delete from target:', console.log)
+      source.print('To copy from source:', console.log)
     }
     /* ready to do the job */
     if (!flags.preview) {

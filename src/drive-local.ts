@@ -15,8 +15,7 @@ export class DriveLocal implements Drive {
    * Enumerate files
    * @param {string} path current recursive path
    */
-  async * walk(path?: string): AsyncGenerator<Entity> {
-    path = path ?? ''
+  async * walk(path = ''): AsyncGenerator<Entity> {
     const full = Path.join(this.root, path)
     const stats: fs.Stats = await fs.promises.stat(full)
     if (stats.isFile()) {
@@ -27,7 +26,7 @@ export class DriveLocal implements Drive {
         yield * this.walk(Path.join(path, ent.name))
       }
     } else {
-      throw new Error(`Unknown object ${name}`)
+      throw new Error(`Unsupported object ${name}`)
     }
   }
 
