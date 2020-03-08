@@ -40,24 +40,14 @@ export class DriveLocal implements Drive {
     const wr = target.write(entity)
     return new Promise<void>((resolve, reject) => {
       wr.on('error', reject)
-      .on('finish', resolve)
+      wr.on('finish', resolve)
       rd.on('error', reject)
-      .pipe(wr)
+      rd.pipe(wr)
     }).catch(error => {
       rd.destroy()
       wr.end()
       throw error
     })
-  }
-
-  /**
-   * Create stream to write entity
-   * @param {Entity} entity to write to
-   * @returns {stream.Writable} write stream
-   */
-  write(entity: Entity): stream.Writable {
-    const target = Path.join(this.root, entity.name)
-    return fs.createWriteStream(target)
   }
 
   /**
@@ -68,6 +58,16 @@ export class DriveLocal implements Drive {
     await fs.promises.unlink(
       Path.join(this.root, entity.name)
     )
+  }
+
+  /**
+   * Create stream to write entity
+   * @param {Entity} entity to write to
+   * @returns {stream.Writable} write stream
+   */
+  write(entity: Entity): stream.Writable {
+    const target = Path.join(this.root, entity.name)
+    return fs.createWriteStream(target)
   }
 
   /**
