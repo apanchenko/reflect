@@ -34,14 +34,20 @@ export class DriveLocal implements Drive {
    * Copy entity to target drive
    * @param {Entity} entity to copy
    * @param {Drive} target for entity
+   * @param {function} onCopy data listener to show progress
    */
-  async copy(entity: Entity, target: Drive): Promise<void> {
+  async copy(entity: Entity, target: Drive, onCopy?: (size: number) => void): Promise<void> {
     const rd = this.read(entity)
     const wr = target.write(entity)
     return new Promise<void>((resolve, reject) => {
       wr.on('error', reject)
       wr.on('finish', resolve)
       rd.on('error', reject)
+      onCopy && rd.on('data', data => {
+        onCopy(data.length)
+        const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+        sleep(10)
+      })
       rd.pipe(wr)
     }).catch(error => {
       rd.destroy()
