@@ -1,7 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {DriveLocal} from './drive-local'
 import {Storage} from './storage'
-import * as ProgressBar from 'progress'
 
 export = class Reflect extends Command {
   static description = 'Make target folder equivalent to source'
