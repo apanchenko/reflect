@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import {DriveLocal} from './drive-local'
 import {Storage} from './storage'
+import * as ProgressBar from 'progress'
 
 export = class Reflect extends Command {
   static description = 'Make target folder equivalent to source'
@@ -8,8 +9,8 @@ export = class Reflect extends Command {
   static flags = {
     version: flags.version({char: 'v'}),
     help: flags.help({char: 'h'}),
-    ignorecase: flags.boolean({char: 'i', description: 'not implemented yet'}),
-    preview: flags.boolean({char: 'p', description: 'do not change any file'}),
+    'dry-run': flags.boolean({char: 'n', description: 'do not change any file'}),
+    progress: flags.boolean({char: 'p', description: 'show progress'}),
     quiet: flags.boolean({char: 'q', description: 'no console output'}),
   }
 
@@ -43,7 +44,7 @@ export = class Reflect extends Command {
       source.print('To copy from source:', console.log)
     }
     /* ready to do the job */
-    if (!flags.preview) {
+    if (!flags['dry-run']) {
       /* delete obsolete file from target */
       target.delete()
       /* copy new/changed files from source to target */

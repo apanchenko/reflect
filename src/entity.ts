@@ -7,8 +7,8 @@ export class Entity {
     if (name.length === 0) {
       throw new Error('Entity name must be non-empty')
     }
-    if (size <= 0) {
-      throw new Error('Entity size must be positive')
+    if (size < 0) {
+      throw new Error(`Entity size cannot be negative (${name})`)
     }
     this.file = name
     this.length = size

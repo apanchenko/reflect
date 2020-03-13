@@ -1,5 +1,6 @@
 import {Entity} from './entity'
-import {Drive} from './Drive'
+import {Drive} from './drive'
+import * as ProgressBar from 'progress'
 
 export class Storage {
   private drive: Drive
@@ -58,9 +59,21 @@ export class Storage {
 
   /**
    * Copy all entities to the other side
+   * @param {Progress} progress show operation progress
    */
   async copy() {
-    this.entities.forEach(ent => this.drive.copy(ent, this.mirror.drive))
+    /* progress bar to visualize copying process */
+    const progress = new ProgressBar('copying: [:bar] :rate/bps :percent :etas :file', {
+      complete: '\u001B[42m \u001B[0m',
+      incomplete: '\u001B[41m \u001B[0m',
+      total: this.size,
+      width: 60,
+      renderThrottle: 200,
+    })
+    /* eslint-disable no-await-in-loop */
+    for (const entity of this.entities) {
+      await this.drive.copy(entity, this.mirror.drive, size => progress.tick(size, {file: entity.name}))
+    }
   }
 
   /**
