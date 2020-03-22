@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as Path from 'path'
-import {Drive} from './Drive'
+import {Drive, OnProgress} from './Drive'
 import {Entity} from './entity'
 import * as stream from 'stream'
 
@@ -36,7 +36,7 @@ export class DriveLocal implements Drive {
    * @param {Drive} target for entity
    * @param {function} onCopy data listener to show progress
    */
-  async copy(entity: Entity, target: Drive, onCopy?: (size: number) => void): Promise<void> {
+  async copy(entity: Entity, target: Drive, onCopy?: OnProgress): Promise<void> {
     const rd = this.read(entity)
     const wr = target.write(entity)
     return new Promise<void>((resolve, reject) => {
@@ -46,7 +46,7 @@ export class DriveLocal implements Drive {
       onCopy && rd.on('data', data => {
         onCopy(data.length)
         const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-        sleep(10)
+        sleep(1000)
       })
       rd.pipe(wr)
     }).catch(error => {

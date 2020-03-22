@@ -47,7 +47,7 @@ export = class Reflect extends Command {
       /* delete obsolete file from target */
       target.delete()
       /* copy new/changed files from source to target */
-      source.copy()
+      source.copy(flags.quiet)
     }
   }
 }

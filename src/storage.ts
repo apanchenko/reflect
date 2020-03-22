@@ -59,20 +59,24 @@ export class Storage {
 
   /**
    * Copy all entities to the other side
-   * @param {Progress} progress show operation progress
+   * @param {boolean} quiet hide progress bar
    */
-  async copy() {
+  async copy(quiet: boolean) {
     /* progress bar to visualize copying process */
-    const progress = new ProgressBar('copying: [:bar] :rate/bps :percent :etas :file', {
-      complete: '\u001B[42m \u001B[0m',
-      incomplete: '\u001B[41m \u001B[0m',
+    const bar = quiet ?  undefined : new ProgressBar('copying: [:bar] :percent :file', {
+      complete: '\u001B[42m.\u001B[0m',
+      incomplete: '\u001B[41m.\u001B[0m',
       total: this.size,
       width: 60,
       renderThrottle: 200,
     })
     /* eslint-disable no-await-in-loop */
     for (const entity of this.entities) {
-      await this.drive.copy(entity, this.mirror.drive, size => progress.tick(size, {file: entity.name}))
+      await this.drive.copy(
+        entity,
+        this.mirror.drive,
+        quiet ? undefined : size => bar?.tick(size, {file: entity.name})
+      )
     }
   }
 
